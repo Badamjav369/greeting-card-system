@@ -1,4 +1,8 @@
-const API_BASE = 'https://greeting-card-system.onrender.com/api';
+//const API_BASE = 'https://greeting-card-system.onrender.com/api';
+//const API_BASE = 'http://localhost:3001/api';
+// const API_BASE = 'http://localhost:3001/api';
+const API_BASE = window.location.origin + '/api';
+
 
 
 let editingGreetingId = null;
