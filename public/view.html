@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мэндчилгээний карт үзэх</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="back-link">
+            <a href="index.html">← Бүх карт руу буцах</a>
+        </div>
+
+        <div id="greetingView" class="greeting-view">
+            <div class="loading">Мэндчилгээний картыг ачааллаж байна...</div>
+        </div>
+
+        <div id="errorView" class="error-view" style="display: none;">
+            <h2>😔 Мэндчилгээний карт олдсонгүй</h2>
+            <p>Таны хайж буй мэндчилгээний карт байхгүй эсвэл устгагдсан байна.</p>
+            <a href="index.html" class="btn btn-primary">Нүүр хуудас руу очих</a>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const greetingId = urlParams.get('id');
+
+        const occasionColors = {
+            birthday: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            anniversary: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            congratulations: 'linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%)',
+            thank_you: 'linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%)',
+            get_well: 'linear-gradient(135deg, #a1c4fd 0%, #c2e9cb 100%)',
+            holiday: 'linear-gradient(135deg, #fa8bff 0%, #2bd2ff 90%)'
+        };
+
+        const occasionLabels = {
+            birthday: '🎂 Төрсөн өдөр',
+            anniversary: '💑 Ойн баяр',
+            congratulations: '🎉 Баяр хүргэе',
+            thank_you: '🙏 Баярлалаа',
+            get_well: '🌸 Эдгээрэй',
+            holiday: '🎄 Баярын мэнд'
+        };
+
+        async function loadGreeting() {
+            if (!greetingId) {
+                showError();
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:3001/api/greeting/${greetingId}`);
+                const data = await response.json();
+
+                if (!data.success || !data.greeting) {
+                    showError();
+                    return;
+                }
+
+                displayGreeting(data.greeting);
+            } catch (error) {
+                console.error('Алдаа:', error);
+                showError();
+            }
+        }
+
+        function displayGreeting(greeting) {
+            const greetingView = document.getElementById('greetingView');
+            const occasionColor = occasionColors[greeting.occasion] || occasionColors.birthday;
+            const occasionLabel = occasionLabels[greeting.occasion] || '🎉 Мэндчилгээ';
+
+            const html = `
+                <div class="greeting-card" style="background: ${occasionColor};">
+                    <div class="greeting-header">
+                        <h1>${occasionLabel}</h1>
+                        <div class="recipient">${greeting.recipientName}д</div>
+                    </div>
+                </div>
+
+                <div class="greeting-body">
+                    <div class="message-box">
+                        <p class="message-text">${greeting.message.replace(/\n/g, '<br>')}</p>
+                    </div>
+
+                    <div class="greeting-footer">
+                        <div class="sender-info">
+                            <p class="sender-label">Хүндэтгэсэн,</p>
+                            <p class="sender-name">${greeting.senderName}</p>
+                        </div>
+                        <div class="date-info">
+                            <p>${new Date(greeting.createdAt).toLocaleDateString('mn-MN', { 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                            })}</p>
+                        </div>
+                    </div>
+
+                    <div class="share-section">
+                        <p><strong>Энэ картыг хуваалцах:</strong></p>
+                        <input type="text" 
+                               value="${window.location.href}" 
+                               readonly 
+                               class="share-link"
+                               onclick="this.select()">
+                        <button onclick="copyLink()" class="btn btn-small">📋 Линк хуулах</button>
+                    </div>
+                </div>
+            `;
+
+            greetingView.innerHTML = html;
+        }
+
+        function showError() {
+            document.getElementById('greetingView').style.display = 'none';
+            document.getElementById('errorView').style.display = 'block';
+        }
+
+        function copyLink() {
+            const input = document.querySelector('.share-link');
+            input.select();
+            document.execCommand('copy');
+            alert('Линк хуулагдлаа!');
+        }
+
+        loadGreeting();
+    </script>
+</body>
+</html>

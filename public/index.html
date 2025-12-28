@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мэндчилгээний карт систем - Карт үүсгэх</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎉 Мэндчилгээ</h1>
+            <p class="subtitle">Хайртай хүмүүстэй мэндчилгээ илгээгээрэй.</p>
+        </header>
+
+        <!-- Үүсгэх/Засах форм -->
+        <div class="card form-card">
+            <h2 id="formTitle">Шинэ мэндчилгээ үүсгэх</h2>
+            
+            <div class="form-group">
+                <label for="senderName">Таны нэр *</label>
+                <input type="text" id="senderName" placeholder="Нэрээ оруулна уу..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="senderEmail">Таны имэйл * (мэдэгдэл авах)</label>
+                <input type="email" id="senderEmail" placeholder="name@gmail.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="recipientName">Хүлээн авагчийн нэр *</label>
+                <input type="text" id="recipientName" placeholder="Хүлээн авагчийн нэрээ оруулна уу..." required>
+            </div>
+
+            <div class="form-group">
+                <label for="occasion">Төрөл *</label>
+                <select id="occasion">
+                    <option value="birthday">🎂 Төрсөн өдөр</option>
+                    <option value="anniversary">💑 Ойн баяр</option>
+                    <option value="congratulations">🎉 Баяр хүргэе</option>
+                    <option value="thank_you">🙏 Баярлалaa</option>
+                    <option value="get_well">🌸 Эдгээрэй</option>
+                    <option value="holiday">🎄 Баярын мэнд</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="message">Таны мэндчилгээ *</label>
+                <textarea id="message" rows="6" placeholder="Энд сэтгэлийнхээ үгийг бичнэ үү..." required></textarea>
+            </div>
+
+            <div class="button-group">
+                <button id="submitBtn" class="btn btn-primary">
+                    <span id="btnText">✉️ Мэндчилгээ илгээх</span>
+                </button>
+                <button id="cancelBtn" class="btn btn-secondary" style="display: none;">
+                    ❌ Болих
+                </button>
+            </div>
+
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+
+        <!-- Мэндчилгээний жагсаалт -->
+        <div class="card">
+            <div class="list-header">
+                <h2>📬 Бүх мэндчилгээний картууд</h2>
+                <button id="refreshBtn" class="btn btn-small">🔄 Шинэчлэх</button>
+            </div>
+            
+            <div id="greetingsList" class="greetings-list">
+                <div class="loading">Мэндчилгээнүүдийг ачааллаж байна...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

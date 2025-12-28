@@ -1,0 +1,9 @@
+# Node modules
+node_modules/
+
+# OS файлууд
+.DS_Store
+Thumbs.db
+
+# Орчны хувьсагч файлууд
+.env
